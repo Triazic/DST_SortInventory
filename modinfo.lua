@@ -1,7 +1,7 @@
 name        = "DJPaul's Sort Inventory"
 description = "Automatically stacks and sorts your inventory into a sensible order. Now with controller support."
 author      = "Paul Gibbs (DJPaul), Triazic edit"
-version     = "1.9d"
+version     = "1.9e"
 forumthread = "/topic/54138-new-mod-djpauls-sort-inventory/"
 
 api_version                = 10  -- DST api version
@@ -15,7 +15,7 @@ icon_atlas                 = "modicon.xml"
 icon                       = "modicon.tex"
 
 client_only_mod         = false
-all_clients_require_mod = true
+all_clients_require_mod = false
 
 configuration_options = {
 	{
@@ -65,7 +65,7 @@ configuration_options = {
 		}
 	},
 	{
-		default = "yes",
+		default = "No",
 		label   = "Fun Mode?",
 		name    = "funMode",
 		options = {

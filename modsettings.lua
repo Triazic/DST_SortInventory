@@ -1,0 +1,4 @@
+EnableModDebugPrint()
+DisableModDisabling()
+DisableLocalModWarning()
+ForceEnableMod()

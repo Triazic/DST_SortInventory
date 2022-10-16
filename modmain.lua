@@ -2,6 +2,42 @@
 -- GLOBAL.require("debugkeys")
 -- GLOBAL.require("debugtools")
 
+-- Highest priority to lowest priority
+local resourceItemsTable = {
+	"log",
+	"twigs",
+	"cutgrass",
+	"goldnugget",
+	"flint",
+	"rocks",
+	"nitre",
+	"papyrus",
+	"nightmarefuel",
+	"rope",
+	"boards",
+	"cutstone",
+	"silk",
+	"thulecite",
+	"livinglog",
+	"pigskin",
+	"thulecite_pieces",
+}
+
+-- Return the first index with the given value (or nil if not found).
+local function indexOf(array, value)
+    for i, v in ipairs(array) do
+        if v == value then
+            return i
+        end
+    end
+    return nil
+end
+
+local function GetPriorityOfResourceItem(itemName)
+	local index = indexOf(resourceItemsTable, itemName)
+	if (index ~= nil) then return index end
+	return 9999
+end
 
 --- Sort through the bag and return the items' new offsets.
 --
@@ -11,7 +47,13 @@
 -- @return Sorted item offsets
 local function sortItems(items, bag, offset)
 	table.sort(items, function(a, b)
-
+		if bag[offset].type == 'resources' then 
+			local aName = bag[offset].contents[a].obj.prefab
+			local bName = bag[offset].contents[b].obj.prefab
+			local aIndex = GetPriorityOfResourceItem(aName)
+			local bIndex = GetPriorityOfResourceItem(bName)
+			return aIndex < bIndex
+		end 
 		-- Sort by name then value.
 		if bag[offset].sortBy == 'name' then
 			if bag[offset].contents[a].obj.name ~= bag[offset].contents[b].obj.name then
@@ -68,30 +110,9 @@ end
 -- @param inst InventoryItem object
 -- @return bool
 local function itemIsResource(inst)
-	-- Highest frequency to lowest fequency
-	local items = {
-		"twigs",
-		"nightmarefuel",
-		"rope",
-		"goldnugget",
-		"boards",
-		"silk",
-		"papyrus",
-		"cutgrass",
-		"thulecite",
-		"cutstone",
-		"flint",
-		"log",
-		"livinglog",
-		"pigskin",
-		"thulecite_pieces",
-		"rocks",
-		"nitre",
-	}
-
-	for i = 1, #items do
+	for i = 1, #resourceItemsTable do
 		local keys = {}
-		if items[i] == inst.prefab then
+		if resourceItemsTable[i] == inst.prefab then
 			return true
 		end
 	end
@@ -402,9 +423,9 @@ local function SortTheInventory()
 		SendModRPCToServer(MOD_RPC[modname]["dsiRemoteSortInventory"], modVersion, maxLights, backpackCategory)
 	end
 
-	if GLOBAL.ThePlayer and GetModConfigData("funMode") == "yes" then
-		GLOBAL.ThePlayer.SoundEmitter:PlaySound("dontstarve/creatures/perd/gobble")
-	end
+	-- if GLOBAL.ThePlayer and GetModConfigData("funMode") == "yes" then
+	-- 	GLOBAL.ThePlayer.SoundEmitter:PlaySound("dontstarve/creatures/perd/gobble")
+	-- end
 end
 
 --- Press "G" to sort your inventory.
