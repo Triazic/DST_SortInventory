@@ -436,6 +436,7 @@ end)
 
 --- Press Triangle/Y whilst inventory is open to sort your inventory
 GLOBAL.TheInput:AddControlHandler(GLOBAL.CONTROL_MENU_MISC_2, function(down)
+	if (not down) then return end
 	-- get if controller inventory is open
 	local isInventoryOpen = GLOBAL.ThePlayer.HUD:IsControllerInventoryOpen()
 	if (isInventoryOpen) then 
